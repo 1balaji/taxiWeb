@@ -6,6 +6,10 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+/**
+ * @author iraklivasha
+ * Utility class for getting bean instances
+ */
 public class BeanUtil {
 
 	private static BeanUtil instance = null;
