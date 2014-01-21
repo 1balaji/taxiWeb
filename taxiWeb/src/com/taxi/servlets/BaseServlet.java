@@ -1,21 +1,29 @@
 package com.taxi.servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 /**
- * Servlet implementation class RegistratorServlet
+ * Servlet implementation class BaseServlet
  */
-public class RegistratorServlet extends BaseServlet {
+public class BaseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    protected JSONArray jsonArr;
+    protected JSONObject jsonObj;
+    protected PrintWriter out;
+    
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RegistratorServlet() {
+    public BaseServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -24,9 +32,7 @@ public class RegistratorServlet extends BaseServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		out.println("Success");
-		
+		// TODO Auto-generated method stub
 	}
 
 	/**
