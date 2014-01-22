@@ -1,11 +1,11 @@
-package com.taxi.util;
+package com.taxi.servlets.filter;
 
 import java.io.IOException;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 
-public class ContenTypetFilter implements Filter {
+public class ContentTypeFilter implements Filter {
 
 	@Override
 	public void destroy() {
@@ -15,15 +15,15 @@ public class ContenTypetFilter implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-	    HttpServletRequest req = (HttpServletRequest) request;
-
-	    if(req.getContentType().equals("application/json"))
-	    	req.getRequestDispatcher(req.getRequestURI()).forward(request, response);
-	    else
-	    {
-	    	chain.doFilter(request,response);
-	    	
-	    }
+//	    HttpServletRequest req = (HttpServletRequest) request;
+//
+//	    if(req.getContentType().equals("application/json"))
+//	    	req.getRequestDispatcher(req.getRequestURI()).forward(request, response);
+//	    else
+//	    {
+//	    	chain.doFilter(request,response);
+//	    	
+//	    }
 	}
 
 	@Override
