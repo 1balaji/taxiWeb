@@ -2,6 +2,7 @@ package com.taxi.servlets.filter;
 
 import java.io.IOException;
 
+import com.taxi.logging.Logger;
 import com.taxi.servlets.HTTP_STATUS_CODES;
 import com.taxi.servlets.StrConstants;
 import com.taxi.servlets.filter.GenericFilter;
@@ -21,7 +22,10 @@ public class ContentTypeFilter extends GenericFilter {
 	    if(req.getContentType()!=null && req.getContentType().equals(StrConstants.CONTENT_TYPE_APP_JSON)) {
 	    	super.doFilter(request, response, chain);
 	    } else {
+	    	
 	    	resp.setStatus(HTTP_STATUS_CODES.INVALID_CONTENT_TYPE.getCode());
+	    	Logger.logError("Irakli : " + HTTP_STATUS_CODES.INVALID_CONTENT_TYPE.getMessage());
+	    	
 	    	this.out.println(HTTP_STATUS_CODES.INVALID_CONTENT_TYPE.getMessage());
 	    }
 	    

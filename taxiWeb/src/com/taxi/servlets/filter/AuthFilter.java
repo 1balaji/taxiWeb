@@ -3,6 +3,7 @@ package com.taxi.servlets.filter;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.taxi.logging.Logger;
+import com.taxi.servlets.HTTP_STATUS_CODES;
 import com.taxi.util.SHAUtil;
 
 /**
@@ -46,11 +49,13 @@ public class AuthFilter extends GenericFilter implements Filter {
 				e.printStackTrace();
 			}
 			
+			Logger.logInfo("Authentication");
+			
 			if(sha.equals(localSha)) {
 				super.doFilter(request, response, chain);
 			} else {
 				resp.setStatus(900);
-				
+				Logger.logError(HTTP_STATUS_CODES.AUTHENTICATION_FAILED.getMessage());
 				resp.getWriter().println("Anauthorized");
 			}
 			
