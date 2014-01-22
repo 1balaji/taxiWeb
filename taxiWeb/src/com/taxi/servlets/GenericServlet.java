@@ -13,7 +13,7 @@ import org.json.JSONObject;
 /**
  * Servlet implementation class BaseServlet
  */
-public class BaseServlet extends HttpServlet {
+public class GenericServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     protected JSONArray jsonArr;
     protected JSONObject jsonObj;
@@ -22,7 +22,7 @@ public class BaseServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BaseServlet() {
+    public GenericServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
