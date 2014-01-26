@@ -2,8 +2,8 @@ package com.taxi.servlets.filter;
 
 import java.io.IOException;
 
+import com.taxi.enums.HTTP_STATUS_CODES;
 import com.taxi.logging.Logger;
-import com.taxi.servlets.HTTP_STATUS_CODES;
 import com.taxi.servlets.StrConstants;
 import com.taxi.servlets.filter.GenericFilter;
 

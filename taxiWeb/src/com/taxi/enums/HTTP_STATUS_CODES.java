@@ -1,4 +1,4 @@
-package com.taxi.servlets;
+package com.taxi.enums;
 
 public enum HTTP_STATUS_CODES {
 
