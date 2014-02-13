@@ -1,6 +1,7 @@
 package com.taxi.servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,12 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.taxi.util.JsonUtil;
 import com.taxi.ejbs.IUserBean;
 import com.taxi.enums.BEAN_ENUM;
 import com.taxi.factory.*;
 import com.taxi.logging.Logger;
 import com.taxi.pojos.UserPojo;
 import com.taxi.util.HttpUtil;
+import com.taxi.util.JsonUtil;
 
 /**
  * Servlet implementation class RegistratorServlet
@@ -80,11 +83,13 @@ public class RegistratorServlet extends GenericServlet {
 			
 			*/
 			
-			JSONObject responseValue = new JSONObject();
-			responseValue.put("success", true);
-			responseValue.put("data", "Registration completed successfully");
+			//this.jsonUtil = new JsonUtil(true, null);
 			
-			this.out = response.getWriter();
+			JSONObject responseValue = new JSONObject();
+			responseValue.put(StrConstants.API_JSON_KEY_SUCCESS, true);
+			responseValue.put(StrConstants.API_JSON_KEY_DATA, "Registration completed successfully");
+			
+			PrintWriter out = response.getWriter();
 			out.println(responseValue.toString());
 			
 			
