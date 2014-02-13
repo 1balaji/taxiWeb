@@ -40,6 +40,10 @@ public class UserPojo implements Serializable {
 	public UserPojo() {
 	}
 
+	public UserPojo(int id, Date createDate, String email, String language, String mobile, Date modificationDate, String name, String note, String password, String photoURL, byte statusID, String surname, String username) {
+		
+	}
+	
 	public String getId() {
 		return this.id;
 	}
