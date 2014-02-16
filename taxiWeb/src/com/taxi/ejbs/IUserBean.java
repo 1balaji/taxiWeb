@@ -15,7 +15,7 @@ public interface IUserBean {
 		//end of Update
 		
 		//Insert
-	public OperationDescriptor registerUser(UserPojo user);
+	public OperationDescriptor manageUser(UserPojo user);
 		//end of Insert
 		
 		//Delete

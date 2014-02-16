@@ -8,14 +8,16 @@ import java.util.Date;
  * The persistent class for the user database table.
  * 
  */
+
 public class UserPojo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String id;
+	
+	private int id;
 
 	private Date createDate;
 
-	private String eMail;
+	private String email;
 
 	private String language;
 
@@ -31,24 +33,28 @@ public class UserPojo implements Serializable {
 
 	private String photoURL;
 
-	private byte statusID;
+	private int statusID;
 
 	private String surname;
 
+	private int typeID;
+
 	private String username;
+
+	private int operationType;
+	
+
 
 	public UserPojo() {
 	}
 
-	public UserPojo(int id, Date createDate, String email, String language, String mobile, Date modificationDate, String name, String note, String password, String photoURL, byte statusID, String surname, String username) {
-		
-	}
 	
-	public String getId() {
+	
+	public int getId() {
 		return this.id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -60,12 +66,12 @@ public class UserPojo implements Serializable {
 		this.createDate = createDate;
 	}
 
-	public String getEMail() {
-		return this.eMail;
+	public String getEmail() {
+		return this.email;
 	}
 
-	public void setEMail(String eMail) {
-		this.eMail = eMail;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getLanguage() {
@@ -124,11 +130,11 @@ public class UserPojo implements Serializable {
 		this.photoURL = photoURL;
 	}
 
-	public byte getStatusID() {
+	public int getStatusID() {
 		return this.statusID;
 	}
 
-	public void setStatusID(byte statusID) {
+	public void setStatusID(int statusID) {
 		this.statusID = statusID;
 	}
 
@@ -140,6 +146,14 @@ public class UserPojo implements Serializable {
 		this.surname = surname;
 	}
 
+	public int getTypeID() {
+		return this.typeID;
+	}
+
+	public void setTypeID(int typeID) {
+		this.typeID = typeID;
+	}
+
 	public String getUsername() {
 		return this.username;
 	}
@@ -148,4 +162,11 @@ public class UserPojo implements Serializable {
 		this.username = username;
 	}
 
+	public int getOperationType() {
+		return operationType;
+	}
+
+	public void setOperationType(int operationType) {
+		this.operationType = operationType;
+	}
 }

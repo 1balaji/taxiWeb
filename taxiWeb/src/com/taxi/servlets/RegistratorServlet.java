@@ -11,14 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.taxi.util.JsonUtil;
+import com.taxi.descriptor.OperationDescriptor;
 import com.taxi.ejbs.IUserBean;
 import com.taxi.enums.BEAN_ENUM;
+import com.taxi.enums.OPERATION_TYPE_ENUM;
 import com.taxi.factory.*;
 import com.taxi.logging.Logger;
 import com.taxi.pojos.UserPojo;
 import com.taxi.util.HttpUtil;
-import com.taxi.util.JsonUtil;
 
 /**
  * Servlet implementation class RegistratorServlet
@@ -37,6 +37,7 @@ public class RegistratorServlet extends GenericServlet {
 	private static final String KEY_REGDATA_MOBILE = "mobile";
 	private static final String KEY_REGDATA_NOTE = "note";
 	private static final String KEY_REGDATA_LANGUAGE = "language";
+	private static final String KEY_REGDATA_OPERATION_TYPE = "operation";
 	
 	
     /**
@@ -60,34 +61,49 @@ public class RegistratorServlet extends GenericServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		//IUserBean bean = (IUserBean)BeanFactory.instance().getBean(BEAN_ENUM.USER_BEAN.getBeanName());
-		//UserPojo user = new UserPojo();
+		IUserBean bean = (IUserBean)BeanFactory.instance().getBean(BEAN_ENUM.USER_BEAN.getBeanName());
+		UserPojo user = new UserPojo();
+		
+		OperationDescriptor descriptor = null;
 		
 		String json = HttpUtil.getPostData(request);
 		
 		try {
 		
-			/*
 			
-			this.jsonObj = new JSONObject(json);
 			
-			JSONObject data = this.jsonObj.getJSONObject(StrConstants.API_JSON_KEY_DATA);
-			String username = data.getString(KEY_REGDATA_USERNAME);
-			String password = data.getString(KEY_REGDATA_PASSWORD);
-			String name = data.getString(KEY_REGDATA_NAME);
-			String surname = data.getString(KEY_REGDATA_SURNAME);
-			String email = data.getString(KEY_REGDATA_EMAIL);
-			String mobile = data.getString(KEY_REGDATA_MOBILE);
-			String note = data.getString(KEY_REGDATA_NOTE);
-			String language = data.getString(KEY_REGDATA_LANGUAGE);
+		    JSONObject jsonObj = new JSONObject(json);
 			
-			*/
+			JSONObject data = jsonObj.getJSONObject(StrConstants.API_JSON_KEY_DATA);
 			
-			//this.jsonUtil = new JsonUtil(true, null);
+			String username =data.get(KEY_REGDATA_USERNAME)!=null ? data.getString(KEY_REGDATA_USERNAME) : null;
+			String password =data.get(KEY_REGDATA_PASSWORD)!=null ? data.getString(KEY_REGDATA_PASSWORD): null;
+			String name = data.get(KEY_REGDATA_NAME)!=JSONObject.NULL ? data.getString(KEY_REGDATA_NAME) : null;
+			String surname =data.get(KEY_REGDATA_SURNAME)!=JSONObject.NULL ? data.getString(KEY_REGDATA_SURNAME): null;
+			String email =data.get(KEY_REGDATA_EMAIL)!=JSONObject.NULL ? data.getString(KEY_REGDATA_EMAIL): null;
+			String mobile =data.get(KEY_REGDATA_MOBILE)!=JSONObject.NULL ? data.getString(KEY_REGDATA_MOBILE): null;
+			String note =data.get(KEY_REGDATA_NOTE)!=JSONObject.NULL ? data.getString(KEY_REGDATA_NOTE): null;
+			String language =data.get(KEY_REGDATA_LANGUAGE)!=JSONObject.NULL ? data.getString(KEY_REGDATA_LANGUAGE): null;
+			
+			int operationType = jsonObj.getInt(KEY_REGDATA_OPERATION_TYPE);
+			
+			user.setUsername(username);
+			user.setPassword(password);
+			user.setName(name);
+			user.setSurname(surname);
+			user.setEmail(email);
+			user.setMobile(mobile);
+			user.setNote(note);
+			user.setLanguage(language);
+			user.setOperationType(operationType);
+			
+			descriptor = bean.manageUser(user);
+			
+		
 			
 			JSONObject responseValue = new JSONObject();
-			responseValue.put(StrConstants.API_JSON_KEY_SUCCESS, true);
-			responseValue.put(StrConstants.API_JSON_KEY_DATA, "Registration completed successfully");
+			responseValue.put(StrConstants.API_JSON_KEY_SUCCESS, descriptor.isSuccess());
+			responseValue.put(StrConstants.API_JSON_KEY_DATA, descriptor.getMessage());
 			
 			PrintWriter out = response.getWriter();
 			out.println(responseValue.toString());
