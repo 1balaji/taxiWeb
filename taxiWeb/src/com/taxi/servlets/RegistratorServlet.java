@@ -15,7 +15,6 @@ import org.json.JSONObject;
 import com.taxi.descriptor.OperationDescriptor;
 import com.taxi.ejbs.IUserBean;
 import com.taxi.enums.BEAN_ENUM;
-import com.taxi.enums.OPERATION_TYPE_ENUM;
 import com.taxi.factory.*;
 import com.taxi.logging.Logger;
 import com.taxi.pojos.UserPojo;
@@ -27,9 +26,6 @@ import com.taxi.util.HttpUtil;
 public class RegistratorServlet extends GenericServlet {
 	private static final long serialVersionUID = 1L;
        
-	private static final String KEY_DEVICEUID = "deviceUID";
-	private static final String KEY_SYSVERSION = "systemVersion";
-	private static final String KEY_DEVICEMODEL = "deviceModel";
 	private static final String KEY_REGDATA_USERNAME = "username";
 	private static final String KEY_REGDATA_PASSWORD = "password";
 	private static final String KEY_REGDATA_NAME = "name";
