@@ -37,15 +37,8 @@ public class BeanFactory {
 	    return p;
 	}
 	
-	
-	public Object getBean(String bean) {
-		Object retVal = null;
-		try {
-			retVal = this.context.lookup(bean+"/remote");
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
-		return retVal;
+	public Object getBean(String bean) throws NamingException {
+		return this.context.lookup(bean+"/remote");
 	}
 	
 }
