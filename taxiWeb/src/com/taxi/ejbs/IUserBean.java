@@ -9,7 +9,7 @@ public interface IUserBean {
 	
 		//end of Select
 		
-		
+	public OperationDescriptor login(String username, String password);	
 		//Update
 		
 		//end of Update
