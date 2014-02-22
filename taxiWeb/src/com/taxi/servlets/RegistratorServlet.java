@@ -25,7 +25,8 @@ import com.taxi.util.HttpUtil;
  */
 public class RegistratorServlet extends GenericServlet {
 	private static final long serialVersionUID = 1L;
-       
+
+	private static final String KEY_REGDATA_ObjId = "objId";
 	private static final String KEY_REGDATA_USERNAME = "username";
 	private static final String KEY_REGDATA_PASSWORD = "password";
 	private static final String KEY_REGDATA_NAME = "name";
@@ -79,7 +80,8 @@ public class RegistratorServlet extends GenericServlet {
 				
 			    JSONObject jsonObj = new JSONObject(json);
 				JSONObject data = jsonObj.getJSONObject(StrConstants.API_JSON_KEY_DATA);
-				
+
+				int objId = data.get(KEY_REGDATA_ObjId)!=null ? data.getInt(KEY_REGDATA_ObjId) : null;
 				String username = data.get(KEY_REGDATA_USERNAME)!=null ? data.getString(KEY_REGDATA_USERNAME) : null;
 				String password = data.get(KEY_REGDATA_PASSWORD)!=null ? data.getString(KEY_REGDATA_PASSWORD): null;
 				String name 	= data.get(KEY_REGDATA_NAME)!=JSONObject.NULL ? data.getString(KEY_REGDATA_NAME) : null;
@@ -91,6 +93,7 @@ public class RegistratorServlet extends GenericServlet {
 				
 				int operationType = jsonObj.getInt(StrConstants.OPERATION_TYPE);
 				
+				user.setId(objId);
 				user.setUsername(username);
 				user.setPassword(password);
 				user.setName(name);
