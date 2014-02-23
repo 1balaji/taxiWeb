@@ -81,7 +81,7 @@ public class RegistratorServlet extends GenericServlet {
 			    JSONObject jsonObj = new JSONObject(json);
 				JSONObject data = jsonObj.getJSONObject(StrConstants.API_JSON_KEY_DATA);
 
-				int objId = data.get(KEY_REGDATA_ObjId)!=null ? data.getInt(KEY_REGDATA_ObjId) : null;
+				int objId 		= data.get(KEY_REGDATA_ObjId)!=null ? data.getInt(KEY_REGDATA_ObjId) : 0;
 				String username = data.get(KEY_REGDATA_USERNAME)!=null ? data.getString(KEY_REGDATA_USERNAME) : null;
 				String password = data.get(KEY_REGDATA_PASSWORD)!=null ? data.getString(KEY_REGDATA_PASSWORD): null;
 				String name 	= data.get(KEY_REGDATA_NAME)!=JSONObject.NULL ? data.getString(KEY_REGDATA_NAME) : null;
