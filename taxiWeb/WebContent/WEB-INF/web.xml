@@ -33,6 +33,14 @@
     <servlet-name>Authenticator</servlet-name>
     <url-pattern>/login</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>UserExistServlet</servlet-name>
+    <servlet-class>com.taxi.servlets.UserExistServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserExistServlet</servlet-name>
+    <url-pattern>/checkUser</url-pattern>
+  </servlet-mapping>
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>Wildcard means whole app requires authentication</web-resource-name>
