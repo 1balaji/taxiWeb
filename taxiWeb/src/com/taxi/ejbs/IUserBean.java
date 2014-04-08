@@ -6,10 +6,13 @@ import com.taxi.pojos.UserPojo;
 public interface IUserBean {
 
 		//Select
+	public OperationDescriptor checkUserName(String userName);
+	public OperationDescriptor userExists(String userName, int providerId, String providerUserId);
 	
 		//end of Select
 		
 	public OperationDescriptor login(String username, String password);	
+	public OperationDescriptor loginWithProvider(UserPojo user);
 		//Update
 		
 		//end of Update

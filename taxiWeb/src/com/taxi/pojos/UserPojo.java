@@ -1,7 +1,9 @@
 package com.taxi.pojos;
 
 import java.io.Serializable;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -9,47 +11,62 @@ import java.util.Date;
  * 
  */
 
-public class UserPojo implements Serializable {
+public class UserPojo extends BasePojo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	
 	private int id;
 
+
 	private Date createDate;
+
 
 	private String email;
 
+	
 	private String language;
+
 
 	private String mobile;
 
+	
 	private Date modificationDate;
 
+	
 	private String name;
+
 
 	private String note;
 
+	
 	private String password;
 
+	
 	private String photoURL;
 
+	
+	private int providerID;
+
+	
+	private String providerUserID;
+
+	
 	private int statusID;
+
 
 	private String surname;
 
+	
 	private int typeID;
 
+	
 	private String username;
 
-	private int operationType;
-	
 
 
 	public UserPojo() {
 	}
 
-	
-	
 	public int getId() {
 		return this.id;
 	}
@@ -130,6 +147,22 @@ public class UserPojo implements Serializable {
 		this.photoURL = photoURL;
 	}
 
+	public int getProviderID() {
+		return this.providerID;
+	}
+
+	public void setProviderID(int providerID) {
+		this.providerID = providerID;
+	}
+
+	public String getProviderUserID() {
+		return this.providerUserID;
+	}
+
+	public void setProviderUserID(String providerUserID) {
+		this.providerUserID = providerUserID;
+	}
+
 	public int getStatusID() {
 		return this.statusID;
 	}
@@ -162,11 +195,6 @@ public class UserPojo implements Serializable {
 		this.username = username;
 	}
 
-	public int getOperationType() {
-		return operationType;
-	}
 
-	public void setOperationType(int operationType) {
-		this.operationType = operationType;
-	}
+
 }
