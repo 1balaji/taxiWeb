@@ -1,7 +1,20 @@
 package com.taxi.pojos;
 
-public class BasePojo 
+import java.io.Serializable;
+
+
+public abstract class BasePojo 
 {
+	
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	public BasePojo()
+	{
+		
+	}
+	
 	private int operationType;
 
 	public int getOperationType() {

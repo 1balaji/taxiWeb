@@ -46,6 +46,16 @@
     <servlet-name>UserExistServlet</servlet-name>
     <url-pattern>/checkUser</url-pattern>
   </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>PhoneNumberExistServlet</servlet-name>
+    <servlet-class>com.taxi.servlets.PhoneNumberExistServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PhoneNumberExistServlet</servlet-name>
+    <url-pattern>/checkBlockedPhoneNUmber</url-pattern>
+  </servlet-mapping>
+ 
  
   <listener>
     <listener-class>

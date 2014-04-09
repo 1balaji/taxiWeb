@@ -1,9 +1,8 @@
 package com.taxi.pojos;
 
+
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -11,10 +10,13 @@ import java.util.List;
  * 
  */
 
-public class UserPojo extends BasePojo implements Serializable {
+
+public class UserPojo extends BasePojo implements Serializable{
+
+
 	private static final long serialVersionUID = 1L;
 
-	
+
 	private int id;
 
 
