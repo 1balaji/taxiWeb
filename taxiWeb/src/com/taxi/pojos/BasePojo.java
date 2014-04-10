@@ -2,18 +2,12 @@ package com.taxi.pojos;
 
 import java.io.Serializable;
 
-
-public abstract class BasePojo 
+public abstract class BasePojo implements Serializable 
 {
-	
-
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
-	
-	
-	public BasePojo()
-	{
-		
-	}
 	
 	private int operationType;
 

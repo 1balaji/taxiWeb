@@ -8,7 +8,6 @@ public interface IUserBean {
 		//Select
 	public OperationDescriptor checkUserName(String userName);
 	public OperationDescriptor userExists(String userName, int providerId, String providerUserId);
-	public OperationDescriptor isPhoneNumberBlocked(String phoneNumber);
 	
 		//end of Select
 		

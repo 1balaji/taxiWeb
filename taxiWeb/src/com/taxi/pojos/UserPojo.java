@@ -1,22 +1,16 @@
 package com.taxi.pojos;
 
-
-import java.io.Serializable;
 import java.util.Date;
-
 
 /**
  * The persistent class for the user database table.
  * 
  */
 
-
-public class UserPojo extends BasePojo implements Serializable{
-
-
+public class UserPojo extends BasePojo {
 	private static final long serialVersionUID = 1L;
 
-
+	
 	private int id;
 
 
