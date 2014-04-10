@@ -2,6 +2,8 @@ package com.taxi.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
@@ -72,6 +74,9 @@ public class RegistratorServlet extends GenericServlet {
 		
 		if(bean!=null) {
 		
+			Map<String, Object> dataBody = null;
+			JSONObject responseValue = new JSONObject();
+			
 			try {
 				
 				String json = HttpUtil.getPostData(request);
@@ -106,21 +111,47 @@ public class RegistratorServlet extends GenericServlet {
 				
 				descriptor = bean.manageUser(user);
 				
-				JSONObject responseValue = new JSONObject();
 				responseValue.put(StrConstants.API_JSON_KEY_SUCCESS, descriptor.isSuccess());
-				responseValue.put(StrConstants.API_JSON_KEY_DATA, descriptor.getMessage());
-				
+
+				dataBody = new HashMap<String, Object>(2); 
+				dataBody.put(StrConstants.API_JSON_KEY_MESSAGE, descriptor.getMessage());
+				dataBody.put(StrConstants.API_JSON_KEY_CODE, descriptor.getCode());
+				responseValue.put(StrConstants.API_JSON_KEY_DATA, dataBody);
 				out.println(responseValue.toString());
 				
 			} catch (JSONException e) {
 				
+				responseValue = new JSONObject();
+				dataBody = new HashMap<String, Object>(1); 
+				dataBody.put(StrConstants.API_JSON_KEY_MESSAGE, String.format(StrConstants.ERR_PARSING_JSON, e.getMessage()));
+				
+				try {
+					responseValue.put(StrConstants.API_JSON_KEY_DATA, dataBody);
+					responseValue.put(StrConstants.API_JSON_KEY_SUCCESS, false);
+					
+				} catch (JSONException ex) {
+					ex.printStackTrace();
+				}
+				
 				Logger.logError(String.format(StrConstants.ERR_PARSING_JSON, e.getMessage()));
-				out.println(String.format(StrConstants.ERR_PARSING_JSON, e.getMessage()));
+				out.println(responseValue.toString());
 				
 			} catch (Exception e) {
 				
-				e.printStackTrace();
-				out.println(String.format(StrConstants.ERR_GENERIC, e.getMessage()));
+				responseValue = new JSONObject();
+				dataBody = new HashMap<String, Object>(1); 
+				dataBody.put(StrConstants.API_JSON_KEY_MESSAGE, String.format(StrConstants.ERR_GENERIC, e.getMessage()));
+				
+				try {
+					responseValue.put(StrConstants.API_JSON_KEY_DATA, dataBody);
+					responseValue.put(StrConstants.API_JSON_KEY_SUCCESS, false);
+					
+				} catch (JSONException ex) {
+					ex.printStackTrace();
+				}
+				
+				Logger.logError(String.format(StrConstants.ERR_GENERIC, e.getMessage()));
+				out.println(responseValue.toString());
 				
 			}
 			
