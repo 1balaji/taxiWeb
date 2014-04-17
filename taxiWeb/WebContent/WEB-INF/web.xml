@@ -22,39 +22,15 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
   <servlet>
-    <servlet-name>RegistratorServlet</servlet-name>
-    <servlet-class>com.taxi.servlets.RegistratorServlet</servlet-class>
+    <servlet-name>UserServlet</servlet-name>
+    <servlet-class>com.taxi.servlets.UserServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>RegistratorServlet</servlet-name>
-    <url-pattern>/register</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>Authenticator</servlet-name>
-    <servlet-class>com.taxi.servlets.Authenticator</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Authenticator</servlet-name>
-    <url-pattern>/login</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>UserExistServlet</servlet-name>
-    <servlet-class>com.taxi.servlets.UserExistServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>UserExistServlet</servlet-name>
-    <url-pattern>/checkUser</url-pattern>
+    <servlet-name>UserServlet</servlet-name>
+    <url-pattern>/user</url-pattern>
   </servlet-mapping>
   
-   <servlet>
-    <servlet-name>PhoneNumberExistServlet</servlet-name>
-    <servlet-class>com.taxi.servlets.PhoneNumberExistServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>PhoneNumberExistServlet</servlet-name>
-    <url-pattern>/checkBlockedPhoneNUmber</url-pattern>
-  </servlet-mapping>
+  
  
  
   <listener>
@@ -63,58 +39,7 @@
     </listener-class>
   </listener>
   
-  <servlet>
-    <servlet-name>DeviceRegisterServlet</servlet-name>
-    <servlet-class>
-      com.taxi.gcm.DeviceRegisterServlet
-    </servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>DeviceRegisterServlet</servlet-name>
-    <url-pattern>/registerDevice</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>DeviceUnregisterServlet</servlet-name>
-    <servlet-class>
-      com.taxi.gcm.DeviceUnregisterServlet
-    </servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>DeviceUnregisterServlet</servlet-name>
-    <url-pattern>/unregisterDevice</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>SendAllMessagesServlet</servlet-name>
-    <servlet-class>
-      com.taxi.gcm.SendAllMessagesServlet
-    </servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>SendAllMessagesServlet</servlet-name>
-    <url-pattern>/sendAll</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>HomeServlet</servlet-name>
-    <servlet-class>
-      com.taxi.gcm.HomeServlet
-    </servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>HomeServlet</servlet-name>
-    <url-pattern>/home</url-pattern>
-  </servlet-mapping>
-  
+ 
   <security-constraint>
 
     <web-resource-collection>
