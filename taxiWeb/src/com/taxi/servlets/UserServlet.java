@@ -23,6 +23,7 @@ import com.taxi.factory.*;
 import com.taxi.logging.Logger;
 import com.taxi.pojos.UserPojo;
 import com.taxi.util.HttpUtil;
+import com.taxi.util.JsonUtil;
 
 /**
  * Servlet implementation class RegistratorServlet
@@ -46,76 +47,68 @@ public class UserServlet extends GenericServlet {
 	private static final String KEY_USERNAME = "username";
 	private static final String KEY_PASSWORD = "password";
 
-
-	
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public UserServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
+	public UserServlet() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
+
 		PrintWriter out = response.getWriter();
 		IUserBean bean = null;
+
+		OperationDescriptor descriptor;
+
+		JSONObject responseValue = new JSONObject();
 		
 		try {
-			
-			bean  = (IUserBean)BeanFactory.instance().getBean(BEAN_ENUM.USER_BEAN.getBeanName());
-			
-		} catch(NamingException e) {
-			
-			Logger.logError(String.format(StrConstants.ERR_BEAN_LOOKUP, e.getMessage()));
-			
-		}
-		
-		if(bean!=null) {
-		
-			Map<String, Object> dataBody = null;
-			JSONObject responseValue = new JSONObject();
-			
-			try {
-				
+
+			bean = (IUserBean) BeanFactory.instance().getBean(BEAN_ENUM.USER_BEAN.getBeanName());
+
+			if (bean != null) {
+
+
 				String json = HttpUtil.getPostData(request);
-				
-				OperationDescriptor descriptor = null;
-				
-			    JSONObject jsonObj = new JSONObject(json);
-			    
-			    int operationType = jsonObj.getInt(StrConstants.OPERATION_TYPE);
-			    
-				JSONObject data = jsonObj.getJSONObject(StrConstants.API_JSON_KEY_DATA);
-				JSONObject attr = jsonObj.getJSONObject(StrConstants.API_JSON_KEY_ATTR);
 
-				
-				if(operationType == USER_OPERATION_TYPE_ENUM.CREATE.getCode() || operationType== USER_OPERATION_TYPE_ENUM.UPDATE.getCode())
-				{
 
-					int objId 		= data.get(KEY_REGDATA_ObjId)!=null ? data.getInt(KEY_REGDATA_ObjId) : 0;
-					String username = data.get(KEY_REGDATA_USERNAME)!=null ? data.getString(KEY_REGDATA_USERNAME) : null;
-					String password = data.get(KEY_REGDATA_PASSWORD)!=null ? data.getString(KEY_REGDATA_PASSWORD): null;
-					String name 	= data.get(KEY_REGDATA_NAME)!=JSONObject.NULL ? data.getString(KEY_REGDATA_NAME) : null;
-					String surname  = data.get(KEY_REGDATA_SURNAME)!=JSONObject.NULL ? data.getString(KEY_REGDATA_SURNAME): null;
-					String email    = data.get(KEY_REGDATA_EMAIL)!=JSONObject.NULL ? data.getString(KEY_REGDATA_EMAIL): null;
-					String mobile   = data.get(KEY_REGDATA_MOBILE)!=JSONObject.NULL ? data.getString(KEY_REGDATA_MOBILE): null;
-					String note     = data.get(KEY_REGDATA_NOTE)!=JSONObject.NULL ? data.getString(KEY_REGDATA_NOTE): null;
-					String language = data.get(KEY_REGDATA_LANGUAGE)!=JSONObject.NULL ? data.getString(KEY_REGDATA_LANGUAGE): null;
-					
+				JSONObject jsonObj = new JSONObject(json);
+
+				int operationType = jsonObj.getInt(StrConstants.OPERATION_TYPE);
+
+				Map<String, Object> data = JsonUtil.getMapFromJsonArray(jsonObj.getJSONObject(StrConstants.API_JSON_KEY_DATA));
+				Map<String, Object> attr = JsonUtil.getMapFromJsonArray(jsonObj.getJSONObject(StrConstants.API_JSON_KEY_ATTR));
+
+				if (operationType == USER_OPERATION_TYPE_ENUM.CREATE.getCode() 
+						|| operationType == USER_OPERATION_TYPE_ENUM.UPDATE.getCode()) {
+
+					int objId = (int) data.get(KEY_REGDATA_ObjId);
+					String username = (String) data.get(KEY_REGDATA_USERNAME);
+					String password = (String) data.get(KEY_REGDATA_PASSWORD);
+					String name = (String) data.get(KEY_REGDATA_NAME);
+					String surname = (String) data.get(KEY_REGDATA_SURNAME);
+					String email = (String) data.get(KEY_REGDATA_EMAIL);
+					String mobile = (String) data.get(KEY_REGDATA_MOBILE);
+					String note = (String) data.get(KEY_REGDATA_NOTE);
+					String language = (String) data.get(KEY_REGDATA_LANGUAGE);
+
 					UserPojo user = new UserPojo();
-					
+
 					user.setId(objId);
 					user.setUsername(username);
 					user.setPassword(password);
@@ -126,61 +119,51 @@ public class UserServlet extends GenericServlet {
 					user.setNote(note);
 					user.setLanguage(language);
 					user.setOperationType(operationType);
-				
+
 					descriptor = bean.manageUser(user);
-				}
-				else
-				{
-					if(operationType == USER_OPERATION_TYPE_ENUM.LOGIN.getCode())
-					{
+					
+					responseValue = returnDefaultMessage(descriptor, operationType);
+					
+					out.println(responseValue.toString());
+
+				} else {
+					if (operationType == USER_OPERATION_TYPE_ENUM.LOGIN.getCode()) {
 
 						boolean loginWithProvider = (boolean) attr.get(ATTR_LOGINWITHPROVIDER);
 
 						if (!loginWithProvider) {
 
-							String username = data.get(KEY_USERNAME) != null ? data.getString(KEY_USERNAME) : null;
-							String password = data.get(KEY_PASSWORD) != null ? data.getString(KEY_PASSWORD) : null;
+							String username = (String) data.get(KEY_USERNAME);
+							String password = (String) data.get(KEY_PASSWORD);
 
 							descriptor = bean.login(username, password);
-						} else
-							{
+							
+							responseValue = returnDefaultMessage(descriptor, operationType);
+							
+							out.println(responseValue.toString());
+							
+						} else {
 
 							UserPojo user = new UserPojo();
 
+							int objId = (int) data.get(KEY_REGDATA_ObjId);
+							String username = (String) data.get(KEY_USERNAME);
+							String password = (String) data.get(KEY_PASSWORD);
+							String name = (String) data.get(KEY_REGDATA_NAME);
+							String surname = (String) data.get(KEY_REGDATA_SURNAME);
+							String email = (String) data.get(KEY_REGDATA_EMAIL);
+							String mobile = (String) data.get(KEY_REGDATA_MOBILE);
+							String note = (String) data.get(KEY_REGDATA_NOTE);
+							String language = (String) data.get(KEY_REGDATA_LANGUAGE);
+							String providerIdString = (String) data.get(KEY_REGDATA_PROVIDERID);
+							String providerUserId = (String) data.get(KEY_REGDATA_PROVIDERUSERID);
 
-							int objId = data.get(KEY_REGDATA_ObjId) != null ? data
-									.getInt(KEY_REGDATA_ObjId) : 0;
-							String username = data.get(KEY_USERNAME) != JSONObject.NULL ? data
-									.getString(KEY_USERNAME) : null;
-							String password = data.get(KEY_PASSWORD) != JSONObject.NULL ? data
-									.getString(KEY_PASSWORD) : null;
-							String name = data.get(KEY_REGDATA_NAME) != JSONObject.NULL ? data
-									.getString(KEY_REGDATA_NAME) : null;
-							String surname = data.get(KEY_REGDATA_SURNAME) != JSONObject.NULL ? data
-									.getString(KEY_REGDATA_SURNAME) : null;
-							String email = data.get(KEY_REGDATA_EMAIL) != JSONObject.NULL ? data
-									.getString(KEY_REGDATA_EMAIL) : null;
-							String mobile = data.get(KEY_REGDATA_MOBILE) != JSONObject.NULL ? data
-									.getString(KEY_REGDATA_MOBILE) : null;
-							String note = data.get(KEY_REGDATA_NOTE) != JSONObject.NULL ? data
-									.getString(KEY_REGDATA_NOTE) : null;
-							String language = data.get(KEY_REGDATA_LANGUAGE) != JSONObject.NULL ? data
-									.getString(KEY_REGDATA_LANGUAGE) : null;
-							String providerIdString = data.get(KEY_REGDATA_PROVIDERID) != JSONObject.NULL ? data
-											.getString(KEY_REGDATA_PROVIDERID) : null;
-							String providerUserId = data.get(KEY_REGDATA_PROVIDERUSERID) != JSONObject.NULL ? data
-													.getString(KEY_REGDATA_PROVIDERUSERID) : null;
+							int providerId = -1;
+							if (PROVIDER_ENUM.FACEBOOK.getMessage().equals(providerIdString))
+								providerId = PROVIDER_ENUM.FACEBOOK.getCode();
+							else if (PROVIDER_ENUM.GOOGLE.getMessage().equals(providerIdString))
+								providerId = PROVIDER_ENUM.GOOGLE.getCode();
 
-
-													
-							int providerId =-1;
-							if(PROVIDER_ENUM.FACEBOOK.getMessage().equals(providerIdString))
-								providerId= PROVIDER_ENUM.FACEBOOK.getCode();
-							else
-								if(PROVIDER_ENUM.GOOGLE.getMessage().equals(providerIdString))
-									providerId= PROVIDER_ENUM.GOOGLE.getCode();
-
-							
 							user.setId(objId);
 							user.setUsername(username);
 							user.setPassword(password);
@@ -194,74 +177,84 @@ public class UserServlet extends GenericServlet {
 							user.setProviderUserID(providerUserId);
 
 							descriptor = bean.loginWithProvider(user);
+							
+							responseValue = returnDefaultMessage(descriptor, operationType);
+							
+							out.println(responseValue.toString());
 						}
 
-					}
-					else
-					{
-						if(operationType == USER_OPERATION_TYPE_ENUM.CHECKUSEREXIST.getCode())
-						{
-							String username = data.get(KEY_USERNAME) != JSONObject.NULL ? data
-									.getString(KEY_USERNAME) : null;
-							String providerIdString = data.get(KEY_REGDATA_PROVIDERID) != JSONObject.NULL ? data
-									.getString(KEY_REGDATA_PROVIDERID) : null;
-							String providerUserId = data.get(KEY_REGDATA_PROVIDERUSERID) != JSONObject.NULL ? data
-									.getString(KEY_REGDATA_PROVIDERUSERID) : null;
+					} else {
+						if (operationType == USER_OPERATION_TYPE_ENUM.CHECKUSEREXIST.getCode()) {
+							String username = (String) data.get(KEY_USERNAME);
+							String providerIdString = (String) data.get(KEY_REGDATA_PROVIDERID);
+							String providerUserId = (String) data.get(KEY_REGDATA_PROVIDERUSERID);
 
 							int providerId = -1;
-							if (PROVIDER_ENUM.FACEBOOK.getMessage()
-									.equals(providerIdString))
+							if (PROVIDER_ENUM.FACEBOOK.getMessage().equals(providerIdString))
 								providerId = PROVIDER_ENUM.FACEBOOK.getCode();
-							else if (PROVIDER_ENUM.GOOGLE.getMessage().equals(
-									providerIdString))
+							else if (PROVIDER_ENUM.GOOGLE.getMessage().equals(providerIdString))
 								providerId = PROVIDER_ENUM.GOOGLE.getCode();
 
-							descriptor = bean.userExists(username, providerId,
-									providerUserId);
+							descriptor = bean.userExists(username, providerId,providerUserId);
 							
+							responseValue = returnDefaultMessage(descriptor, operationType);
+							
+							out.println(responseValue.toString());
 						}
 					}
 				}
-				
-				responseValue.put(StrConstants.API_JSON_KEY_SUCCESS, descriptor.isSuccess());
 
-				dataBody = new HashMap<String, Object>(2); 
-				dataBody.put(StrConstants.API_JSON_KEY_MESSAGE, descriptor.getMessage());
-				dataBody.put(StrConstants.API_JSON_KEY_CODE, descriptor.getCode());
-				responseValue.put(StrConstants.API_JSON_KEY_DATA, dataBody);
-				out.println(responseValue.toString());
-				
-			} catch (JSONException e) {
-				
-				responseValue = new JSONObject();
-				dataBody = new HashMap<String, Object>(1); 
-				dataBody.put(StrConstants.API_JSON_KEY_MESSAGE, String.format(StrConstants.ERR_PARSING_JSON, e.getMessage()));
-				
-				try {
-					responseValue.put(StrConstants.API_JSON_KEY_DATA, dataBody);
-					responseValue.put(StrConstants.API_JSON_KEY_SUCCESS, false);
-					
-				} catch (JSONException ex) {
-					ex.printStackTrace();
-				}
-				
-				Logger.logError(String.format(StrConstants.ERR_PARSING_JSON, e.getMessage()));
-				out.println(responseValue.toString());
-				
-			} catch (Exception e) {
-				
-				responseValue = new JSONObject();
-				dataBody = new HashMap<String, Object>(1); 
-				dataBody.put(StrConstants.API_JSON_KEY_MESSAGE, String.format(StrConstants.ERR_GENERIC, e.getMessage()));
-				
-				
-				Logger.logError(String.format(StrConstants.ERR_GENERIC, e.getMessage()));
-				out.println(responseValue.toString());
-				
 			}
-			
+		} catch (Exception e) {
+
+			out.println(returnExceptionMessage(e).toString());
+
 		}
-		
 	}
+
+
+
+private JSONObject returnExceptionMessage(Exception e) {
+
+		JSONObject responseValue = new JSONObject();
+		try {
+			responseValue.put(StrConstants.API_JSON_KEY_SUCCESS, false);
+			responseValue.put(StrConstants.API_JSON_KEY_CODE, 0);
+			responseValue
+					.put(StrConstants.API_JSON_KEY_MESSAGE, e.getMessage());
+			Logger.logError(String.format(StrConstants.ERR_GENERIC,
+					e.getMessage()));
+
+		} catch (Exception ex) {
+
+			Logger.logError(String.format(StrConstants.ERR_GENERIC,
+					ex.getMessage()));
+			ex.printStackTrace();
+		}
+
+		return responseValue;
+	}
+
+
+	private JSONObject returnDefaultMessage(OperationDescriptor descriptor, int operationType) {
+
+		JSONObject responseValue = new JSONObject();
+		try {
+			
+			responseValue.put(StrConstants.API_JSON_KEY_SUCCESS, descriptor.isSuccess());
+			responseValue.put(StrConstants.API_JSON_KEY_CODE, descriptor.getCode());
+			responseValue.put(StrConstants.API_JSON_KEY_MESSAGE, descriptor.getMessage());
+			responseValue.put(StrConstants.API_JSON_KEY_OPERATION_TYPE, operationType);
+
+		} catch (Exception ex) {
+
+			Logger.logError(String.format(StrConstants.ERR_GENERIC,
+					ex.getMessage()));
+			ex.printStackTrace();
+		}
+
+		return responseValue;
+	}
+
 
 }

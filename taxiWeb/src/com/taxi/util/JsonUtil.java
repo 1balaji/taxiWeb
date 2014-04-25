@@ -159,7 +159,7 @@ public class JsonUtil {
 		return list;
 	}
 
-	private static Map<String, Object> getMapFromJsonArray(JSONObject object) {
+	public static Map<String, Object> getMapFromJsonArray(JSONObject object) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		@SuppressWarnings("unchecked")
 		Iterator<String> keys = object.keys();
@@ -171,8 +171,8 @@ public class JsonUtil {
 	}
 
 	private static Object convertJson(Object json) {
-		if (json == null) {
-			return json;
+		if (json == JSONObject.NULL) {
+			return null;
 		}
 		if (json instanceof JSONObject) {
 			return getMapFromJsonArray((JSONObject) json);

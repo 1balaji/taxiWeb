@@ -29,19 +29,12 @@
     <servlet-name>UserServlet</servlet-name>
     <url-pattern>/user</url-pattern>
   </servlet-mapping>
-  
-  
- 
- 
   <listener>
     <listener-class>
       com.taxi.gcm.ApiKeyInitializer
     </listener-class>
   </listener>
-  
- 
   <security-constraint>
-
     <web-resource-collection>
       <web-resource-name>Wildcard means whole app requires authentication</web-resource-name>
       <url-pattern>/*</url-pattern>
