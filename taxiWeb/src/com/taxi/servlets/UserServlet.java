@@ -4,15 +4,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import javax.management.modelmbean.DescriptorSupport;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.spi.ErrorCode;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 import com.taxi.descriptor.OperationDescriptor;
 import com.taxi.ejbs.IUserBean;
@@ -46,7 +51,12 @@ public class UserServlet extends GenericServlet {
 	private static final String ATTR_LOGINWITHPROVIDER = "loginWithProvider";
 	private static final String KEY_USERNAME = "username";
 	private static final String KEY_PASSWORD = "password";
+	
+	private static final String PASSWORD_PATTERN = "^[_A-Za-z0-9!@#$&_]$";
 
+	private Pattern pattern;
+	private Matcher matcher;
+	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -73,7 +83,7 @@ public class UserServlet extends GenericServlet {
 		PrintWriter out = response.getWriter();
 		IUserBean bean = null;
 
-		OperationDescriptor descriptor;
+		OperationDescriptor descriptor = null;
 
 		JSONObject responseValue = new JSONObject();
 		
@@ -201,6 +211,68 @@ public class UserServlet extends GenericServlet {
 							
 							out.println(responseValue.toString());
 						}
+						else
+						{
+							if(operationType == USER_OPERATION_TYPE_ENUM.CHEKPASSWORD.getCode())
+							{
+								
+								String password = (String) data.get(KEY_PASSWORD);
+								
+								pattern = Pattern.compile(PASSWORD_PATTERN);
+								
+								matcher = pattern.matcher(password);
+								
+								if(matcher.matches())
+								{
+									responseValue = returnCustomMessage(true, "Password Correct!", 1100, operationType);
+									out.println(responseValue.toString());
+								}
+								else
+								{
+									responseValue = returnCustomMessage(false, "Invali Characters!", 1101, operationType);
+									out.println(responseValue.toString());
+								}
+							}
+							else
+							{
+								if(operationType == USER_OPERATION_TYPE_ENUM.CHECKPHONENUMBERISBLOCKED.getCode())
+								{
+									String phoneNumber = (String) data.get(KEY_REGDATA_MOBILE);
+
+									descriptor = bean.isPhoneNumberBlocked(phoneNumber);
+									
+									responseValue = returnDefaultMessage(descriptor, operationType);
+									
+									out.println(responseValue.toString());
+								}
+								else
+								{
+									if(operationType == USER_OPERATION_TYPE_ENUM.GET.getCode())
+									{
+										String userName = (String) data.get(KEY_USERNAME);
+										int userId = (int) data.get(KEY_REGDATA_ObjId);
+										
+										descriptor = bean.getUser(userId, userName);
+										
+										responseValue = returnDefaultMessage(descriptor, operationType);
+										
+										if(descriptor.getSource() != null)
+										{
+											UserPojo userPojo = (UserPojo)descriptor.getSource();
+											
+											String st = JsonUtil.obj2JSONStr(userPojo);
+											
+											responseValue.put(StrConstants.API_JSON_KEY_DATA, st);
+											
+											
+										}
+										
+										out.println(responseValue.toString());
+										
+									}
+								}
+							}
+						}
 					}
 				}
 
@@ -256,5 +328,25 @@ private JSONObject returnExceptionMessage(Exception e) {
 		return responseValue;
 	}
 
+	
+	private JSONObject returnCustomMessage(boolean flag, String message, int code, int operationType) {
+
+		JSONObject responseValue = new JSONObject();
+		try {
+			
+			responseValue.put(StrConstants.API_JSON_KEY_SUCCESS, flag);
+			responseValue.put(StrConstants.API_JSON_KEY_CODE, code);
+			responseValue.put(StrConstants.API_JSON_KEY_MESSAGE, message);
+			responseValue.put(StrConstants.API_JSON_KEY_OPERATION_TYPE, operationType);
+
+		} catch (Exception ex) {
+
+			Logger.logError(String.format(StrConstants.ERR_GENERIC,
+					ex.getMessage()));
+			ex.printStackTrace();
+		}
+
+		return responseValue;
+	}
 
 }

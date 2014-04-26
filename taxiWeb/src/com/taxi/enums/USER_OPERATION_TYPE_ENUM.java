@@ -8,7 +8,9 @@ public enum USER_OPERATION_TYPE_ENUM {
 	GET(4, "Get Operation"),
 	LIST(5, "List Operation"),
 	CHECKUSEREXIST(6, "Check Operation"),
-	LOGIN(7, "Other Operation");
+	CHEKPASSWORD(7, "Check Operation"),
+	CHECKPHONENUMBERISBLOCKED(8, "Check Operation"),
+	LOGIN(9, "Other Operation");
 	
 	private final int code;
 	private final String message;

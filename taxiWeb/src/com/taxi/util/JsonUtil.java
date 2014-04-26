@@ -7,16 +7,20 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
 import com.taxi.logging.Logger;
+import com.taxi.pojos.UserPojo;
 
 public class JsonUtil {
 	
@@ -187,6 +191,19 @@ public class JsonUtil {
 	
 	public static void main(String[] args) throws IOException {
 		
+		UserPojo u = new UserPojo();
+		u.setUsername("irakli");
+		u.setPassword("asda");
+		u.setEmail("sdfs");
+		u.setId(11);
+		
+		try {
+			System.out.println(obj2JSONStr(u));
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("key1", "val1");
 		Map<String, Object> subMap = new HashMap<String, Object>();
@@ -229,4 +246,38 @@ public class JsonUtil {
 		*/   
 		
 	}
+	
+	public static String obj2JSONStr(Object o) throws Exception {
+		
+		StringBuilder result = new StringBuilder();
+		
+		Field[] fields = o.getClass().getDeclaredFields();
+		
+		for( int i = 0 ; i < fields.length ; i++ )
+		{
+			
+			fields[i].setAccessible(true);
+			result.append("\"");
+			result.append(fields[i].getName());
+			result.append("\"");
+			result.append(":");
+			
+			if(fields[i].getType()==String.class) {
+				result.append("\"");
+				result.append(fields[i].get(o));
+				result.append("\"");
+			} else {
+				result.append(fields[i].get(o));
+			}
+			
+			result.append(",");
+			
+		}
+		
+		result = new StringBuilder(result.substring(0, result.length()-1));
+		
+		return result.toString();
+	}
+	
+
 }
