@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.jar.JarOutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.spi.ErrorCode;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 
 import com.taxi.descriptor.OperationDescriptor;
@@ -260,9 +262,9 @@ public class UserServlet extends GenericServlet {
 										{
 											UserPojo userPojo = (UserPojo)descriptor.getSource();
 											
-											String st = JsonUtil.obj2JSONStr(userPojo);
+											JSONObject st = JsonUtil.obj2JSONStr(userPojo);
 											
-											responseValue.put(StrConstants.API_JSON_KEY_DATA, st);
+											responseValue.put(StrConstants.API_JSON_KEY_SOURCE, st.toString());
 											
 											
 										}

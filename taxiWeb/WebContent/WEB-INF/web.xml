@@ -29,6 +29,14 @@
     <servlet-name>UserServlet</servlet-name>
     <url-pattern>/user</url-pattern>
   </servlet-mapping>
+   <servlet>
+    <servlet-name>RequestServlet</servlet-name>
+    <servlet-class>com.taxi.servlets.RequestServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RequestServlet</servlet-name>
+    <url-pattern>/call</url-pattern>
+  </servlet-mapping>
   <listener>
     <listener-class>
       com.taxi.gcm.ApiKeyInitializer

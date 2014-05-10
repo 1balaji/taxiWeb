@@ -2,7 +2,8 @@ package com.taxi.enums;
 
 public enum BEAN_ENUM {
 
-	USER_BEAN("UserBean");
+	USER_BEAN("UserBean"),
+	REQUEST_BEAN("RequestBean");
 		
 	private final String beanName;
 	

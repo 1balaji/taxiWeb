@@ -174,7 +174,7 @@ public class JsonUtil {
 		return map;
 	}
 
-	private static Object convertJson(Object json) {
+	public static Object convertJson(Object json) {
 		if (json == JSONObject.NULL) {
 			return null;
 		}
@@ -247,36 +247,22 @@ public class JsonUtil {
 		
 	}
 	
-	public static String obj2JSONStr(Object o) throws Exception {
+	public static JSONObject obj2JSONStr(Object o) throws Exception {
 		
-		StringBuilder result = new StringBuilder();
+		JSONObject jsonObj = new JSONObject();
 		
 		Field[] fields = o.getClass().getDeclaredFields();
-		
+
 		for( int i = 0 ; i < fields.length ; i++ )
 		{
 			
 			fields[i].setAccessible(true);
-			result.append("\"");
-			result.append(fields[i].getName());
-			result.append("\"");
-			result.append(":");
-			
-			if(fields[i].getType()==String.class) {
-				result.append("\"");
-				result.append(fields[i].get(o));
-				result.append("\"");
-			} else {
-				result.append(fields[i].get(o));
-			}
-			
-			result.append(",");
+
+			jsonObj.put(fields[i].getName(), fields[i].get(o));
 			
 		}
 		
-		result = new StringBuilder(result.substring(0, result.length()-1));
-		
-		return result.toString();
+		return jsonObj;
 	}
 	
 

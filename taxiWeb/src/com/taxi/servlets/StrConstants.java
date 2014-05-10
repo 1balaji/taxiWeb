@@ -5,6 +5,7 @@ public class StrConstants {
 	public static final String CONTENT_TYPE_APP_JSON = "application/json";
 	public static final String API_JSON_KEY_ATTR = "attr";
 	public static final String API_JSON_KEY_DATA = "data";
+	public static final String API_JSON_KEY_SOURCE = "source";
 	public static final String API_JSON_KEY_SUCCESS = "success";
 	public static final String API_JSON_KEY_EXIST = "exists";
 	public static final String API_JSON_KEY_MESSAGE = "message";
