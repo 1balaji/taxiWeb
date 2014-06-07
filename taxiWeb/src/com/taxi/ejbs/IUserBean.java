@@ -5,29 +5,25 @@ import com.taxi.pojos.UserPojo;
 
 public interface IUserBean {
 
-	//Get
+	// Get
 	public OperationDescriptor getUser(int id, String userName);
-	//end Get
-	
-		//Select
-	public OperationDescriptor checkUserName(String userName);
+	public OperationDescriptor checkCode(int userId, int code);
+	// public OperationDescriptor listUser();
+	// end of Select
+
+	// Update
+	public OperationDescriptor updateUserVerification(int userId, boolean isConfirmed);
+	// end of Update
+
+	// Insert
+	public OperationDescriptor manageUser(UserPojo user);
 	public OperationDescriptor userExists(String userName, int providerId, String providerUserId);
 	public OperationDescriptor isPhoneNumberBlocked(String phoneNumber);
-	
-		//end of Select
-		
-	public OperationDescriptor login(String username, String password);	
-	public OperationDescriptor loginWithProvider(UserPojo user);
-		//Update
-		
-		//end of Update
-		
-		//Insert
-	public OperationDescriptor manageUser(UserPojo user);
-		//end of Insert
-		
-		//Delete
-		
-		//end of Delete
-	
+	// end of Insert
+
+	// Delete
+
+	// end of Delete
+
+	public OperationDescriptor login(UserPojo user);
 }

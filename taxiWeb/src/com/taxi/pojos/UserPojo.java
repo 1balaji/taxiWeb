@@ -7,60 +7,45 @@ import java.util.Date;
  * 
  */
 
-public class UserPojo extends BasePojo {
-	private static final long serialVersionUID = 1L;
+public class UserPojo extends BasePojo  {
 
+	private static final long serialVersionUID = 1L;
 	
 	private int id;
 
-
 	private Date createDate;
-
 
 	private String email;
 
-	
 	private String language;
-
 
 	private String mobile;
 
-	
 	private Date modificationDate;
 
-	
 	private String name;
-
 
 	private String note;
 
-	
 	private String password;
 
-	
 	private String photoURL;
 
-	
 	private int providerID;
 
-	
 	private String providerUserID;
 
-	
 	private int statusID;
-
 
 	private String surname;
 
-	
-	private int typeID;
+	private boolean  isConfirmed;
 
-	
 	private String username;
-
-
+	
 
 	public UserPojo() {
+		
 	}
 
 	public int getId() {
@@ -175,12 +160,12 @@ public class UserPojo extends BasePojo {
 		this.surname = surname;
 	}
 
-	public int getTypeID() {
-		return this.typeID;
+	public boolean isConfirmed() {
+		return isConfirmed;
 	}
 
-	public void setTypeID(int typeID) {
-		this.typeID = typeID;
+	public void setConfirmed(boolean isConfirmed) {
+		this.isConfirmed = isConfirmed;
 	}
 
 	public String getUsername() {
@@ -190,7 +175,5 @@ public class UserPojo extends BasePojo {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
-
 
 }

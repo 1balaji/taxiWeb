@@ -141,21 +141,7 @@ public class UserServlet extends GenericServlet {
 				} else {
 					if (operationType == USER_OPERATION_TYPE_ENUM.LOGIN.getCode()) {
 
-						boolean loginWithProvider = (boolean) attr.get(ATTR_LOGINWITHPROVIDER);
-
-						if (!loginWithProvider) {
-
-							String username = (String) data.get(KEY_USERNAME);
-							String password = (String) data.get(KEY_PASSWORD);
-
-							descriptor = bean.login(username, password);
-							
-							responseValue = returnDefaultMessage(descriptor, operationType);
-							
-							out.println(responseValue.toString());
-							
-						} else {
-
+						
 							UserPojo user = new UserPojo();
 
 							int objId = (int) data.get(KEY_REGDATA_ObjId);
@@ -188,12 +174,21 @@ public class UserServlet extends GenericServlet {
 							user.setProviderID(providerId);
 							user.setProviderUserID(providerUserId);
 
-							descriptor = bean.loginWithProvider(user);
+							descriptor = bean.login(user);
 							
 							responseValue = returnDefaultMessage(descriptor, operationType);
 							
+							if(descriptor.getSource() != null)
+							{
+								UserPojo userPojo = (UserPojo)descriptor.getSource();
+								
+								JSONObject st = JsonUtil.obj2JSONStr(userPojo);
+								
+								responseValue.put(StrConstants.API_JSON_KEY_SOURCE, st.toString());
+							}
+							
 							out.println(responseValue.toString());
-						}
+						
 
 					} else {
 						if (operationType == USER_OPERATION_TYPE_ENUM.CHECKUSEREXIST.getCode()) {
@@ -271,6 +266,57 @@ public class UserServlet extends GenericServlet {
 										
 										out.println(responseValue.toString());
 										
+									}
+									else
+									{
+										if(operationType == USER_OPERATION_TYPE_ENUM.CHECKVERIFICATIONCODE.getCode())
+										{
+											String userName = (String) data.get(KEY_USERNAME);
+											int userId = (int) data.get(KEY_REGDATA_ObjId);
+											
+											descriptor = bean.getUser(userId, userName);
+											
+											responseValue = returnDefaultMessage(descriptor, operationType);
+											
+											if(descriptor.getSource() != null)
+											{
+												UserPojo userPojo = (UserPojo)descriptor.getSource();
+												
+												JSONObject st = JsonUtil.obj2JSONStr(userPojo);
+												
+												responseValue.put(StrConstants.API_JSON_KEY_SOURCE, st.toString());
+												
+												
+											}
+											
+											out.println(responseValue.toString());
+										}
+										else
+										{
+											if(operationType == USER_OPERATION_TYPE_ENUM.UPDATEUSERVERIFICATION.getCode())
+											{
+												String userName = (String) data.get(KEY_USERNAME);
+												int userId = (int) data.get(KEY_REGDATA_ObjId);
+												
+												descriptor = bean.getUser(userId, userName);
+												
+												responseValue = returnDefaultMessage(descriptor, operationType);
+												
+												if(descriptor.getSource() != null)
+												{
+													UserPojo userPojo = (UserPojo)descriptor.getSource();
+													
+													JSONObject st = JsonUtil.obj2JSONStr(userPojo);
+													
+													responseValue.put(StrConstants.API_JSON_KEY_SOURCE, st.toString());
+													
+													
+												}
+												
+												out.println(responseValue.toString());
+											}
+
+										}
 									}
 								}
 							}
