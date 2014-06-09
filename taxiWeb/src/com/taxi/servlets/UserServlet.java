@@ -53,6 +53,8 @@ public class UserServlet extends GenericServlet {
 	private static final String ATTR_LOGINWITHPROVIDER = "loginWithProvider";
 	private static final String KEY_USERNAME = "username";
 	private static final String KEY_PASSWORD = "password";
+	private static final String KEY_VERIFICATION_CODE = "verificationCode";
+	private static final String KEY_IS_CONFIRMED = "isConfirmed";
 	
 	private static final String PASSWORD_PATTERN = "^[_A-Za-z0-9!@#$&_]$";
 
@@ -269,12 +271,13 @@ public class UserServlet extends GenericServlet {
 									}
 									else
 									{
+										//Case check if code is valid, for user id
 										if(operationType == USER_OPERATION_TYPE_ENUM.CHECKVERIFICATIONCODE.getCode())
 										{
-											String userName = (String) data.get(KEY_USERNAME);
+											int verificationCode = (int) data.get(KEY_VERIFICATION_CODE);
 											int userId = (int) data.get(KEY_REGDATA_ObjId);
 											
-											descriptor = bean.getUser(userId, userName);
+											descriptor = bean.checkCode(userId, verificationCode);
 											
 											responseValue = returnDefaultMessage(descriptor, operationType);
 											
@@ -293,12 +296,13 @@ public class UserServlet extends GenericServlet {
 										}
 										else
 										{
+											//Case for update user confirmation, changing isConfirmed flag
 											if(operationType == USER_OPERATION_TYPE_ENUM.UPDATEUSERVERIFICATION.getCode())
 											{
-												String userName = (String) data.get(KEY_USERNAME);
+												boolean isConfirmed = (boolean) data.get(KEY_IS_CONFIRMED);
 												int userId = (int) data.get(KEY_REGDATA_ObjId);
 												
-												descriptor = bean.getUser(userId, userName);
+												descriptor = bean.updateUserVerification(userId, isConfirmed);
 												
 												responseValue = returnDefaultMessage(descriptor, operationType);
 												
@@ -315,6 +319,82 @@ public class UserServlet extends GenericServlet {
 												
 												out.println(responseValue.toString());
 											}
+											else
+											{
+												//Case generation new user verification code, and resend again
+												if(operationType == USER_OPERATION_TYPE_ENUM.UPDATEUSERVERIFICATIONCODE.getCode())
+												{
+													String mobile = (String) data.get(KEY_REGDATA_MOBILE);
+													int userId = (int) data.get(KEY_REGDATA_ObjId);
+													
+													descriptor = bean.generateUserConfirmationCode(userId, mobile);
+													
+													responseValue = returnDefaultMessage(descriptor, operationType);
+													
+													if(descriptor.getSource() != null)
+													{
+														UserPojo userPojo = (UserPojo)descriptor.getSource();
+														
+														JSONObject st = JsonUtil.obj2JSONStr(userPojo);
+														
+														responseValue.put(StrConstants.API_JSON_KEY_SOURCE, st.toString());
+														
+														
+													}
+													
+													out.println(responseValue.toString());
+												}
+												else
+												{
+													if(operationType == USER_OPERATION_TYPE_ENUM.CONFIRM.getCode())
+													{
+														int verificationCode = (int) data.get(KEY_VERIFICATION_CODE);
+														int userId = (int) data.get(KEY_REGDATA_ObjId);
+														
+														descriptor = bean.confirm(userId, verificationCode);
+														
+														responseValue = returnDefaultMessage(descriptor, operationType);
+														
+														if(descriptor.getSource() != null)
+														{
+															UserPojo userPojo = (UserPojo)descriptor.getSource();
+															
+															JSONObject st = JsonUtil.obj2JSONStr(userPojo);
+															
+															responseValue.put(StrConstants.API_JSON_KEY_SOURCE, st.toString());
+															
+															
+														}
+														
+														out.println(responseValue.toString());
+													}
+													else
+													{
+														if(operationType == USER_OPERATION_TYPE_ENUM.UPDATEUSERMOBILE.getCode())
+														{
+															String mobile = (String) data.get(KEY_REGDATA_MOBILE);
+															int userId = (int) data.get(KEY_REGDATA_ObjId);
+															
+															descriptor = bean.updateUserMobile(userId, mobile);
+															
+															responseValue = returnDefaultMessage(descriptor, operationType);
+															
+															if(descriptor.getSource() != null)
+															{
+																UserPojo userPojo = (UserPojo)descriptor.getSource();
+																
+																JSONObject st = JsonUtil.obj2JSONStr(userPojo);
+																
+																responseValue.put(StrConstants.API_JSON_KEY_SOURCE, st.toString());
+																
+																
+															}
+															
+															out.println(responseValue.toString());
+														}
+													}
+												}
+											}
 
 										}
 									}
@@ -326,9 +406,7 @@ public class UserServlet extends GenericServlet {
 
 			}
 		} catch (Exception e) {
-
 			out.println(returnExceptionMessage(e).toString());
-
 		}
 	}
 

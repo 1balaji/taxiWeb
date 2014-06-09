@@ -12,7 +12,10 @@ public enum USER_OPERATION_TYPE_ENUM {
 	CHECKPHONENUMBERISBLOCKED(8, "Check Operation"),
 	LOGIN(9, "Other Operation"),
 	CHECKVERIFICATIONCODE(10, "Other Operation"),
-	UPDATEUSERVERIFICATION(11, "Other Operation");
+	UPDATEUSERVERIFICATION(11, "Other Operation"),
+	UPDATEUSERVERIFICATIONCODE(12, "Other Operation"),
+	CONFIRM(13, "Other Operation"),
+	UPDATEUSERMOBILE(14, "Other Operation");
 	
 	private final int code;
 	private final String message;
